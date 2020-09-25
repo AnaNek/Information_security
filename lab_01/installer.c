@@ -7,6 +7,6 @@
 int main(void) 
 {	
     write_license();
-	return 0;
+    return 0;
 }
 

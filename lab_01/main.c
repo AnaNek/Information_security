@@ -14,5 +14,5 @@ int main(void)
     	printf("FAIL");
     }
     
-	return 0;
+    return 0;
 }
