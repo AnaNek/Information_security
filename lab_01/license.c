@@ -19,11 +19,11 @@ int get_serial_number(char *serial_number, int n)
     char *command = "";
     FILE *fp = NULL;
 	
-    #ifdef _WIN32
+    #if defined _WIN32 || defined __CYGWIN__
         command = "wmic bios get serialnumber";
     #elif __linux__
         command = "dmidecode -t system | grep Serial";
-    #elif __unix__
+    #elif TARGET_OS_MAC
         command = "system_profiler | grep Serial";
     #endif
 	
