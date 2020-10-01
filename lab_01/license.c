@@ -4,16 +4,6 @@
 #include <errno.h>
 #include "license.h"
 
-int split(char *serial_number, int n)
-{
-    int i;
-    for (i = 0; i < n && serial_number[i] != ':'; i++)
-    { }
-	
-    memmove(serial_number, serial_number + i + 1, n - i);
-    return 0;
-}
-
 int get_serial_number(char *serial_number, int n)
 {
     char *command = "";
@@ -23,6 +13,8 @@ int get_serial_number(char *serial_number, int n)
         command = "wmic bios get serialnumber";
     #elif __linux__
         command = "dmesg | grep UUID | grep \"Kernel\" | sed \"s/.*UUID=//g\" | sed \"s/\\ ro\\ quiet.*//g\"";
+        // Ваоиант с мак адресом
+        //command = "cat /sys/class/net/*/address";
     #elif TARGET_OS_MAC
         command = "system_profiler | grep Serial";
     #endif
@@ -35,15 +27,11 @@ int get_serial_number(char *serial_number, int n)
         return -1;
     }
     
-    if (fgets(serial_number, n, fp) != NULL) 
-    {
-        split(serial_number, n);
-        pclose(fp);
-	return 0;
-    }
+    while (fgets(serial_number, n, fp)) 
+    {}
     
     pclose(fp);
-    return -1;
+    return 0;
 }
 
 int write_license(void)
