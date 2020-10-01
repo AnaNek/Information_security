@@ -22,7 +22,7 @@ int get_serial_number(char *serial_number, int n)
     #if defined _WIN32 || defined __CYGWIN__
         command = "wmic bios get serialnumber";
     #elif __linux__
-        command = "dmidecode -t system | grep Serial";
+        command = "dmesg | grep UUID | grep \"Kernel\" | sed \"s/.*UUID=//g\" | sed \"s/\\ ro\\ quiet.*//g\"";
     #elif TARGET_OS_MAC
         command = "system_profiler | grep Serial";
     #endif

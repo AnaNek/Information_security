@@ -7,11 +7,11 @@ int main(void)
     
     if (rc == LICENSE_SUCCESS)
     {
-    	printf("SUCCESS!!");
+    	printf("SUCCESS! You have permission\n");
     }
     else
     {
-    	printf("FAIL");
+    	printf("FAIL. You need to run installer first\n");
     }
     
     return 0;
