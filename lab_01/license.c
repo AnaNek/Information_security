@@ -8,7 +8,7 @@ int get_serial_number(char *serial_number, int n)
 {
     char *command = "";
     FILE *fp = NULL;
-    char buf[128];
+    int i = 0;
     char *ptr = serial_number;
 	
     #if defined _WIN32 || defined __CYGWIN__
@@ -30,13 +30,10 @@ int get_serial_number(char *serial_number, int n)
         return -1;
     }
     
-    while (ptr) 
+    while (i < 2 && ptr) 
     {
-        ptr = fgets(buf, sizeof(buf), fp);
-        if (strcmp(buf, "\n") != 0)
-        {
-            strcpy(serial_number, buf);
-        }
+        ptr = fgets(serial_number, n, fp);
+        i++;
     }
     
     pclose(fp);
@@ -73,7 +70,7 @@ int check_license(void)
     fgets(correct_sn, n, license);
 	
     int rc = get_serial_number(sn, n);
-	
+    
     if (strcmp(sn, correct_sn) != 0)
     {
         fclose(license);
