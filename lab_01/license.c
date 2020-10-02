@@ -8,12 +8,15 @@ int get_serial_number(char *serial_number, int n)
 {
     char *command = "";
     FILE *fp = NULL;
+    char buf[128];
+    char *ptr = serial_number;
 	
     #if defined _WIN32 || defined __CYGWIN__
-        command = "wmic bios get serialnumber";
+        //command = "wmic bios get serialnumber";
+        command = "wmic csproduct get uuid";
     #elif __linux__
         command = "dmesg | grep UUID | grep \"Kernel\" | sed \"s/.*UUID=//g\" | sed \"s/\\ ro\\ quiet.*//g\"";
-        // Ваоиант с мак адресом
+        // Вариант с мак адресом
         //command = "cat /sys/class/net/*/address";
     #elif TARGET_OS_MAC
         command = "system_profiler | grep Serial";
@@ -27,8 +30,14 @@ int get_serial_number(char *serial_number, int n)
         return -1;
     }
     
-    while (fgets(serial_number, n, fp)) 
-    {}
+    while (ptr) 
+    {
+        ptr = fgets(buf, sizeof(buf), fp);
+        if (strcmp(buf, "\n") != 0)
+        {
+            strcpy(serial_number, buf);
+        }
+    }
     
     pclose(fp);
     return 0;
