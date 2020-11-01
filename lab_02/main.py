@@ -1,5 +1,6 @@
 import random
 import sys
+from struct import pack
 
 SYMBOL_COUNT = 256
 ROTORS_COUNT = 3
@@ -87,7 +88,7 @@ class Enigma:
         return s
                
     def encrypt(self, symbol):
-        encrypted = ord(symbol)
+        encrypted = symbol
         n = len(self.rotors)
         
         for rotor in self.rotors:
@@ -103,17 +104,18 @@ class Enigma:
             if self.rotors[i - 1].full_cycle:
                 self.rotors[i].rotate()
                 
-        return chr(encrypted) 
+        return encrypted
         
     def encrypt_data(self, data):
-        encrypted_data = ''
+        encrypted_data = b''
         for symbol in data:
-            encrypted_data += self.encrypt(symbol)
+            encrypted = self.encrypt(symbol)
+            encrypted_data += pack("B", encrypted)
         return encrypted_data
         
 def main():
     try:
-        data = open(sys.argv[1], "r")
+        data = open(sys.argv[1], "rb")
     except IndexError:
         print("Error with open")
         return
@@ -126,7 +128,7 @@ def main():
     reflector = Reflector()
     enigma = Enigma(rotors, reflector)
   
-    enc_file = open("enc_" + sys.argv[1], "w")
+    enc_file = open("enc_" + sys.argv[1], "wb")
         
     lines = data.read()
     data.close()
@@ -140,8 +142,8 @@ def main():
     enc_str = 'Encrypted:%s\n' % (encrypted_data)
     print(enc_str)
     
-    enc_file = open("enc_" + sys.argv[1], "r")
-    dec_file = open("dec_" + sys.argv[1], "w")
+    enc_file = open("enc_" + sys.argv[1], "rb")
+    dec_file = open("dec_" + sys.argv[1], "wb")
     
     enigma.reset()
     
