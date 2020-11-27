@@ -29,7 +29,7 @@ def main():
     for byte in data:
         temp.append(byte)
         if len(temp) == 16:
-             print(temp)
+             #print(temp)
              encrypted_part = aes.encrypt(temp, key)
              encrypted_data.extend(encrypted_part)
              temp = []
@@ -40,18 +40,18 @@ def main():
         for i in range(empty_spaces - 1):
             temp.append(0)
         temp.append(1)
-        print(temp)
+        #print(temp)
         encrypted_part = aes.encrypt(temp, key)
         encrypted_data.extend(encrypted_part)
                 
     enc_file.write(bytes(encrypted_data))
     enc_file.close()
     
-    data_str = 'Input data:%s\n' % (data)
-    print(data_str)
+    #data_str = 'Input data:%s\n' % (data)
+    #print(data_str)
     
-    enc_str = 'Encrypted:%s\n' % (encrypted_data)
-    print(enc_str)
+    #enc_str = 'Encrypted:%s\n' % (encrypted_data)
+    #print(enc_str)
     
     enc_file = open("enc_" + sys.argv[1], "rb")
     dec_file = open("dec_" + sys.argv[1], "wb")
@@ -80,8 +80,8 @@ def main():
     dec_file.write(bytes(decrypted_data))
     dec_file.close()
     
-    dec_str = 'Decrypted:%s\n' % (decrypted_data)
-    print(dec_str)
+    #dec_str = 'Decrypted:%s\n' % (decrypted_data)
+    #print(dec_str)
     
 if __name__ == '__main__':
     main()
